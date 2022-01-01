@@ -1,8 +1,9 @@
 // region imports
 
 import {Connection, createConnection, RowDataPacket, OkPacket} from 'mysql2/promise';
-import {UFText} from "../tools/UFText";
 import {UFLog} from "../log/UFLog";
+import {UFDatabase} from "./UFDatabase";
+import {IUFDynamicObject} from "../types/IUFDynamicObject";
 
 // endregion
 
@@ -12,20 +13,12 @@ const LOG_PREFIX: string = 'DATABASE';
 
 // endregion
 
-// region private types
-
-type DynamicObject = {
-  [name: string]: any
-}
-
-// endregion
-
 // region class
 
 /**
- * {@link UFMysqlDatabase} is a helper class to manage a mysql database connection and query it in various ways.
+ * {@link UFMysqlDatabase} implements {@link UFDatabase} for use with mysql using the mysql2 library.
  */
-class UFMysqlDatabase {
+class UFMysqlDatabase extends UFDatabase<RowDataPacket> {
   // region private variables
 
   /**
@@ -33,7 +26,7 @@ class UFMysqlDatabase {
    *
    * @private
    */
-  private m_connection: (Connection|null) = null;
+  private m_connection: (Connection | null) = null;
 
   /**
    * The server
@@ -65,7 +58,7 @@ class UFMysqlDatabase {
 
   /**
    * Log to use
-   * 
+   *
    * @private
    */
   private m_log: UFLog;
@@ -81,11 +74,12 @@ class UFMysqlDatabase {
    *   Log to use
    */
   constructor(aLog: UFLog) {
+    super();
     this.m_log = aLog;
   }
 
   // endregion
-  
+
   // region public methods
 
   /**
@@ -114,257 +108,28 @@ class UFMysqlDatabase {
     this.m_log.info(LOG_PREFIX, 'connected to database', `host:${aHost}`, `database:${aDatabase}`, `user:${anUser}`);
   }
 
-  /**
-   * Execute a sql to get multiple rows.
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*[]} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {RowDataPacket[]} result from sql statement
-   */
-  async rows(aSql: string, aParameterValues: any[] = []): Promise<RowDataPacket[]> {
-    const rows = await this.execute('rows', aSql, aParameterValues);
-    return rows as RowDataPacket[];
-  }
+  // endregion
+
+  // region UFDatabase
 
   /**
-   * Execute a sql to get multiple rows as a certain type.
-   *
-   * @template T
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*[]} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {T[]} Result from sql statement
+   * @inheritDoc
    */
-  async rowsAs<T>(aSql: string, aParameterValues: any[] = []): Promise<T[]> {
-    return await this.rows(aSql, aParameterValues) as T[];
-  }
-
-  /**
-   * Execute a sql to get a row.
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*[]} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {RowDataPacket|undefined} result from sql statement; undefined when no row could be found
-   */
-  async row(aSql: string, aParameterValues: any[] = []): Promise<RowDataPacket | undefined> {
-    const rows = await this.execute('row', aSql, aParameterValues) as RowDataPacket[];
-    return rows.length ? rows[0] : undefined;
-  }
-
-  /**
-   * Execute a sql to get a row as a certain type.
-   * 
-   * @template T
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*[]} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {T|undefined} result from sql statement; undefined when no row could be found
-   */
-  async rowAs<T>(aSql: string, aParameterValues: any[] = []): Promise<T | undefined> {
-    return await this.row(aSql, aParameterValues) as T;
-  }
-
-  /**
-   * Execute a sql to get a row. If no row can be found, the method will throw an error.
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {RowDataPacket} result from sql statement
-   *
-   * @throws an error if no row can be found
-   */
-  async rowOrFail(aSql: string, aParameterValues: any = []): Promise<RowDataPacket> {
-    const row = await this.row(aSql, aParameterValues);
-    if (row == undefined) {
-      throw new Error('no row for query ' + aSql + ' ' + JSON.stringify(aParameterValues));
-    }
-    return row;
-  }
-
-  /**
-   * Execute a sql to get a row as a certain type. If no row can be found, the method will throw an error.
-   * 
-   * @template T
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*[]} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {T} result from sql statement
-   *
-   * @throws an error if no row can be found
-   */
-  async rowOrFailAs<T>(aSql: string, aParameterValues: any[] = []): Promise<T> {
-    return await this.rowOrFail(aSql, aParameterValues) as T;
-  }
-
-  /**
-   * Execute a sql to get a single value. The method returns the value of the first field of the query.
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*[]} aParameterValues
-   *   Values to use in case the statement contains parameters
-   * @param {*} aDefault
-   *   Default value to return if the sql statement did not have any results
-   *
-   * @return {*} result from sql statement or aDefault
-   */
-  async field(aSql: string, aParameterValues: any[] = [], aDefault: any = undefined): Promise<any> {
-    const rows = await this.execute('field', aSql, aParameterValues) as RowDataPacket[];
-    if (rows.length) {
-      const row = rows[0];
-      const keys = Object.keys(row as object);
-      if (keys.length) {
-        return row[keys[0]];
-      }
-    }
-    return aDefault;
-  }
-
-  /**
-   * Execute a sql to get a single value as a certain type.
-   * 
-   * @template T
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*} aParameterValues
-   *   Values to use in case the statement contains parameters
-   * @param {T} aDefault
-   *   Default value to return if the sql statement did not have any results
-   *
-   * @return {T} result from sql statement or aDefault
-   */
-  async fieldAs<T>(aSql: string, aParameterValues: any = [], aDefault: T): Promise<T> {
-    return await this.field(aSql, aParameterValues, aDefault) as T;
-  }
-
-  /**
-   * Execute a sql to get a single value. If no value can be found, the method will throw an error.
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {RowDataPacket} result from sql statement
-   *
-   * @throws an error if no row can be found
-   */
-  async fieldOrFail(aSql: string, aParameterValues: any = []): Promise<any> {
-    const field = await this.field(aSql, aParameterValues);
-    if (field === undefined) {
-      throw new Error('no field for query');
-    }
-    return field;
-  }
-
-  /**
-   * Execute a sql to get a single value as a certain type. If no value can be found, the method will throw an error.
-   * 
-   * @template T
-   *
-   * @param {string} aSql
-   *   Sql statement to perform
-   * @param {*} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {T} result from sql statement
-   *
-   * @throws an error if no row can be found
-   */
-  async fieldOrFailAs<T>(aSql: string, aParameterValues: any = []): Promise<T> {
-    return await this.fieldOrFail(aSql, aParameterValues) as T;
-  }
-
-  /**
-   * Performs an insert and returns the id of the created record.
-   *
-   * @param {string} aSql
-   *   Sql insert statement
-   * @param {*} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {number} id of created record.
-   */
-  async insert(aSql: string, aParameterValues: any = []): Promise<number> {
+  async insert(aSql: string, aParameterValues: IUFDynamicObject): Promise<number> {
     const result = await this.execute('insert', aSql, aParameterValues) as OkPacket;
     return result.insertId;
   }
 
   /**
-   * Inserts a data from a structure. The aData structure can contain a primary key field, when building the sql
-   * statement it will be skipped. After the insert statement the generated id will be assigned to the primary key
-   * field.
-   * 
-   * @template T
-   *
-   * @param {string} aTable
-   *   Name of table
-   * @param {T} aData
-   *   Data to insert (should be some form of object), the primary key value will be updated after the insert
-   * @param {string} aPrimaryKey
-   *   Name of primary key field
-   *
-   * @return {T} aData with primary key value updated
+   * @inheritDoc
    */
-  async insertObject<T extends object>(aTable: string, aData: T, aPrimaryKey: string = 'id'): Promise<T> {
-    let columns = '';
-    let values = '';
-    const data: any[] = [];
-    Object.entries(aData).forEach(([key, value]) => {
-      if (key !== aPrimaryKey) {
-        columns = UFText.append(columns, key, ',');
-        values = UFText.append(values, '?', ',');
-        data.push(value);
-      }
-    });
-    const id = await this.insert(`insert into ${aTable} (${columns}) values (${values})`, data);
-    if (id > 0) {
-      (aData as DynamicObject)[aPrimaryKey] = id;
-    }
-    return aData;
-  }
-
-  /**
-   * Performs an update and returns the number of changed records.
-   *
-   * @param {string} aSql
-   *   Sql insert statement
-   * @param {*} aParameterValues
-   *   Values to use in case the statement contains parameters
-   *
-   * @return {number} number of changed records.
-   */
-  async update(aSql: string, aParameterValues: any = []): Promise<number> {
+  async update(aSql: string, aParameterValues?: IUFDynamicObject): Promise<number> {
     const result = await this.execute('update', aSql, aParameterValues) as OkPacket;
     return result.changedRows;
   }
 
   /**
-   * Execute a function within a transaction.
-   *
-   * @param {function} aCallback
-   *   A function that will be called with await.
-   *
-   * @throws any exception that occurred while calling aCallback
+   * @inheritDoc
    */
   async transaction(aCallback: () => Promise<void>): Promise<void> {
     if (this.m_connection == null) {
@@ -374,34 +139,42 @@ class UFMysqlDatabase {
     try {
       await aCallback();
       await this.m_connection.commit();
-    }
-    catch (error) {
+    } catch (error) {
       await this.m_connection.rollback();
       throw error;
-    }
-    finally {
+    } finally {
     }
   }
 
   /**
-   * Generates a unique code to be used in some table.
-   *
-   * @param {string} aTable
-   *   Table to use unique code with
-   * @param {string} aColumn
-   *   Name of column in table that contains the unique code
-   * @param {number} aLength
-   *   Number of characters the code should exist of
-   *
-   * @return {string} an unique code
+   * @inheritDoc
    */
-  async getUniqueCode(aTable: string, aColumn: string, aLength: number): Promise<string> {
-    while (true) {
-      const code = UFText.generateCode(aLength);
-      if (await this.fieldAs<number>(`select count(*) from ${aTable} where ${aColumn} = ?`, [code], 0) === 0) {
-        return code;
+  protected async rows(aSql: string, aParameterValues?: IUFDynamicObject): Promise<RowDataPacket[]> {
+    const rows = await this.execute('rows', aSql, aParameterValues);
+    return rows as RowDataPacket[];
+  }
+
+  /**
+   * @inheritDoc
+   */
+  protected async row(aSql: string, aParameterValues?: IUFDynamicObject): Promise<RowDataPacket | undefined> {
+    const rows = await this.execute('row', aSql, aParameterValues) as RowDataPacket[];
+    return rows.length ? rows[0] : undefined;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  protected async field(aSql: string, aParameterValues?: IUFDynamicObject, aDefault: any = undefined): Promise<any> {
+    const rows = await this.execute('field', aSql, aParameterValues) as RowDataPacket[];
+    if (rows.length) {
+      const row = rows[0];
+      const keys = Object.keys(row as object);
+      if (keys.length) {
+        return row[keys[0]];
       }
     }
+    return aDefault;
   }
 
   // endregion
@@ -422,24 +195,53 @@ class UFMysqlDatabase {
    *
    * @throws error
    */
-  async execute(aDescription: string, aSql: string, aParameterValues: any[] = [])  {
+  private async execute(aDescription: string, aSql: string, aParameterValues?: IUFDynamicObject) {
     if (this.m_connection == null) {
       throw new Error('There is no connection to the database.')
     }
+    // convert sql to mysql using ? and array of values
+    const values: any[] = [];
+    const sql = aParameterValues
+      ? this.processSqlParameters(
+        aSql,
+        aParameterValues,
+        (name, value) => {
+          values.push(value);
+          return '?';
+        }
+      )
+      : aSql;
     // try to execute sql
     try {
-      const [rows, fields] = await this.m_connection.execute(aSql, aParameterValues);
-      return rows;
-    }
-    catch(error: any) {
-      this.m_log.error(LOG_PREFIX, error, error.code);
+      const [result, fields] = await this.m_connection.execute(sql, values);
+      return result;
+    } catch (error: any) {
+      this.m_log.error(LOG_PREFIX, error, error.code, aDescription, sql, values);
     }
     // on failure try to reconnect to the database
+    await this.reconnect();
+    // execute query again
     try {
-      await this.m_connection.end();
+      const [result, fields] = await this.m_connection.execute(sql, values);
+      return result;
+    } catch (error: any) {
+      this.m_log.error(LOG_PREFIX, error, error.code, aDescription, sql, values);
+      throw error;
     }
-    catch(error: any) {
-      this.m_log.error(LOG_PREFIX, error, error.code, 'ending connection');
+  }
+
+  /**
+   * Tries to reconnect to the database.
+   *
+   * @throws * When connection failed.
+   */
+  private async reconnect() {
+    if (this.m_connection != null) {
+      try {
+        await this.m_connection.end();
+      } catch (error: any) {
+        this.m_log.error(LOG_PREFIX, error, error.code, 'ending connection');
+      }
     }
     try {
       this.m_connection = await createConnection({
@@ -449,23 +251,13 @@ class UFMysqlDatabase {
         password: this.m_password
       });
       this.m_log.info(LOG_PREFIX, 'reconnected to database');
-    }
-    catch(error: any) {
-      this.m_log.error(LOG_PREFIX, error, 'reconnecting', error.code, aDescription, aSql, aParameterValues);
-      throw error;
-    }
-    // execute query again
-    try {
-      const [rows, fields] = await this.m_connection.execute(aSql, aParameterValues);
-      return rows;
-    }
-    catch(error: any) {
-      this.m_log.error(LOG_PREFIX, error, error.code, aDescription, aSql, aParameterValues);
+    } catch (error: any) {
+      this.m_log.error(LOG_PREFIX, error, 'reconnecting', error.code);
       throw error;
     }
   }
 
-  // endregion
+// endregion
 }
 
 // endregion

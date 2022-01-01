@@ -82,10 +82,8 @@ class UFLog {
   /**
    * Writes an entry to the log.
    *
-   * @param {string} aPrefix
-   *   A prefix for the entry
    * @param {...} aData
-   *   Additional entries to write
+   *   Entries to write
    */
   log(...aData: any[]): void {
     this.add(console.log, `[LOG]`, ...aData);
@@ -96,18 +94,20 @@ class UFLog {
    *
    * @param {string} aPrefix
    *   A prefix for the entry
-   * @param {Error|null} anError
+   * @param {Error|*|null} anError
    *   An error object to write or null to create a general error entry
    * @param {string} aDescription
    *   A description of the action that was being performed that caused the error
    * @param {...} aData
    *   Additional entries to write
    */
-  error(aPrefix: string, anError: (Error | null), aDescription: string = '', ...aData: any[]): void {
-    if (anError) {
+  error(aPrefix: string, anError: (Error | any | null), aDescription: string = '', ...aData: any[]): void {
+    if (anError instanceof Error) {
       this.add(
         console.error, `[ERROR:${aPrefix}]`, aDescription, anError.name, anError.message, ...aData, anError.stack
       );
+    } else if (anError) {
+      this.add(console.error, `[ERROR:${aPrefix}]`, aDescription, anError.toString(), ...aData);
     } else {
       this.add(console.error, `[ERROR:${aPrefix}]`, aDescription, ...aData);
     }

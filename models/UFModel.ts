@@ -111,8 +111,8 @@ export default class UFModel implements IUFModel {
   }
 
   /**
-   * Unlocks the model instance. If a call matches the first call to {@link UFModel#lock} call
-   * {@link UF.constants.UFEvent#onPropertiesChanged} if there are any pending changes.
+   * Unlocks the model instance. If a call matches the first call to {@link lock} call
+   * {@link onPropertiesChanged} if there are any pending changes.
    *
    * @return current lock count
    */
@@ -150,7 +150,7 @@ export default class UFModel implements IUFModel {
   }
 
   /**
-   * Checks if there are changed properties. This method only is usefull while the data is locked. Else the method
+   * Checks if there are changed properties. This method only is useful while the data is locked. Else the method
    * will always return false.
    *
    * @returns {boolean} true if there is a changed property.
@@ -192,7 +192,7 @@ export default class UFModel implements IUFModel {
    * @inheritDoc
    */
   isValidPropertyValue(aPropertyName: string, aValue: any): boolean {
-    // make sure meta data exists before using it (to prevent creation of unnecessary data)
+    // make sure metadata exists before using it (to prevent creation of unnecessary data)
     if (this.hasPropertyMetaData(aPropertyName)) {
       return this.getPropertyMetaData(aPropertyName).validators.every(
         validator => UFValidators.isValidProperty(this, aPropertyName, validator, aValue)
@@ -219,7 +219,7 @@ export default class UFModel implements IUFModel {
   /**
    * Sets a property to a value. The method checks if the property is a function. If it is, the method
    * will call the function passing the value as parameter. Else the method will assign the value
-   * directly and call {@link UFModel#changed}.
+   * directly and call {@link changed}.
    *
    * @param aName
    *   Property name
@@ -312,9 +312,8 @@ export default class UFModel implements IUFModel {
   }
 
   /**
-   * This method can be called when a property changes value. If the instance is locked via
-   * [[UFModel#lock]] the names are stored. Else the [[UFModel#onPropertiesChanged]] method is called
-   * with the list of names.
+   * This method can be called when a property changes value. If the instance is locked via {@link lock} the names are
+   * stored. Else the {@link onPropertiesChanged} method is called with the list of names.
    *
    * The function accepts a variable number of name parameters
    *
@@ -351,7 +350,7 @@ export default class UFModel implements IUFModel {
   // region Private methods
 
   /**
-   * Gets meta data for property name. Creates a meta data record if none exists for the property.
+   * Gets metadata for property name. Creates a metadata record if none exists for the property.
    *
    * @param aPropertyName
    *   Name of property
