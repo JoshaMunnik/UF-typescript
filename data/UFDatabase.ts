@@ -187,13 +187,62 @@ abstract class UFDatabase<TRow> {
    * Performs an update and returns the number of changed records.
    *
    * @param {string} aSql
-   *   Sql insert statement
+   *   Sql update statement
    * @param {IUFDynamicObject} aParameterValues
    *   Values to use in case the statement contains parameters
    *
    * @return {number} number of changed records.
    */
   abstract update(aSql: string, aParameterValues?: IUFDynamicObject): Promise<number>;
+
+  /**
+   * Updates a record in a table assuming it has a single primary key column.
+   *
+   * @template T
+   *
+   * @param {string} aTable
+   *   Name of table
+   * @param {*} aPrimaryValue
+   *   Primary key vale
+   * @param {T} aData
+   *   Object containing field names and their new values.
+   * @param {string} aPrimaryKey
+   *   Name of primary key
+   */
+  async updateObject<T extends object>(
+    aTable: string, aPrimaryValue: any, aData: T, aPrimaryKey: string = 'id'
+  ): Promise<void> {
+    let fields = '';
+    const data: IUFDynamicObject = {};
+    Object.entries(aData).forEach(([key, value]) => {
+      if (key !== aPrimaryKey) {
+        fields = UFText.append(fields, key + '=' + ':' + key, ',');
+        data[key] = value;
+      }
+    });
+    if (fields.length) {
+      const sql = 'update ' + aTable + ' set ' + fields + ' where ' + aPrimaryKey + ' = :' + aPrimaryKey;
+      data[aPrimaryKey] = aPrimaryValue;
+      await this.update(sql, data);
+    }
+  }
+
+  /**
+   * Performs a delete and returns the number of deleted records.
+   *
+   * The default implementation calls {@link update} assuming it is handled in the same way by the database
+   * implementation.
+   *
+   * @param {string} aSql
+   *   Sql delete statement
+   * @param {IUFDynamicObject} aParameterValues
+   *   Values to use in case the statement contains parameters
+   *
+   * @return {number} number of deleted records.
+   */
+  async delete(aSql: string, aParameterValues?: IUFDynamicObject): Promise<number> {
+    return await this.update(aSql, aParameterValues);
+  }
 
   /**
    * Generates a unique code to be used in some table.
