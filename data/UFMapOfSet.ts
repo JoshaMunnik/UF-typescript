@@ -29,7 +29,7 @@ class UFMapOfSet<TKey, TValue> {
    * @param {TValue} aValue
    *   Value to add to the group of aKey
    */
-  add(aKey: TKey, aValue: TValue): void  {
+  add(aKey: TKey, aValue: TValue): void {
     if (!this.m_map.has(aKey)) {
       this.m_map.set(aKey, new Set<TValue>());
     }
@@ -78,8 +78,7 @@ class UFMapOfSet<TKey, TValue> {
    *
    * @returns {boolean} True if the map contains the key.
    */
-  has(aKey: TKey): boolean
-  {
+  has(aKey: TKey): boolean {
     return this.m_map.has(aKey);
   }
 
@@ -93,9 +92,17 @@ class UFMapOfSet<TKey, TValue> {
    *
    * @returns {boolean} True if the map contains the key and value.
    */
-  hasValue(aKey: TKey, aValue: TValue): boolean
-  {
+  hasValue(aKey: TKey, aValue: TValue): boolean {
     return this.m_map.has(aKey) && (this.m_map.get(aKey) as Set<TValue>).has(aValue);
+  }
+
+  /**
+   * Checks if the map contains any sets.
+   *
+   * @returns {boolean} True if there are no sets.
+   */
+  isEmpty(): boolean {
+    return this.m_map.size == 0;
   }
 
   // endregion
