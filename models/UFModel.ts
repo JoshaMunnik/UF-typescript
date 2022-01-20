@@ -125,7 +125,7 @@ export class UFModel implements IUFModel {
     this.m_lockCount--;
     if ((this.m_lockCount === 0) && (this.m_changedList.size > 0)) {
       // make copy
-      const list: string[] = [...this.m_changedList.values()];
+      const list: string[] = Array.from(this.m_changedList);
       // clear list
       this.m_changedList.clear();
       // call callback
@@ -179,7 +179,7 @@ export class UFModel implements IUFModel {
    * @returns {string[]} a list of dirty property names.
    */
   getDirtyProperties(): string[] {
-    return [...this.m_dirtyList.values()];
+    return Array.from(this.m_dirtyList);
   }
 
   /**

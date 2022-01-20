@@ -65,7 +65,7 @@ export class UFMapOfSet<TKey, TValue> {
   get(aKey: TKey): TValue[] {
     if (this.m_map.has(aKey)) {
       const set = this.m_map.get(aKey) as Set<TValue>;
-      return [...set.values()];
+      return Array.from(set);
     }
     return [];
   }

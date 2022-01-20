@@ -342,6 +342,7 @@ export abstract class UFDatabase<TRow> {
     const matches = aSql.matchAll(/(:[\w\d_]+)/g);
     let start = 0;
     let result = '';
+    // @ts-ignore
     for (const match of matches) {
       if (match.index != undefined) {
         const currentName = match[0].substring(1);
