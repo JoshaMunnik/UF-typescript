@@ -11,7 +11,7 @@ import {UFText} from "../tools/UFText";
 /**
  * A simple class that writes log entries to a file and to the console.
  */
-class UFLog {
+export class UFLog {
   // region private variables
 
   /**
@@ -259,11 +259,5 @@ class UFLog {
 
   // endregion
 }
-
-// endregion
-
-// region exports
-
-export {UFLog};
 
 // endregion

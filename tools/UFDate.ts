@@ -9,7 +9,7 @@ import {UFText} from "./UFText";
 /**
  * {@link UFDate} defines support methods for {@link Date}.
  */
-class UFDate {
+export class UFDate {
   /**
    * Gets the date formatted for use with mysql: "yyyy-mm-dd hh:mm:ss"
    *
@@ -32,11 +32,5 @@ class UFDate {
       + UFText.twoDigits(aDate.getSeconds());
   }
 }
-
-// endregion
-
-// region exports
-
-export {UFDate};
 
 // endregion

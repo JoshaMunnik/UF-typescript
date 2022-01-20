@@ -18,7 +18,7 @@ const LOG_PREFIX: string = 'DATABASE';
 /**
  * {@link UFMysqlDatabase} implements {@link UFDatabase} for use with mysql using the mysql2 library.
  */
-class UFMysqlDatabase extends UFDatabase<RowDataPacket> {
+export class UFMysqlDatabase extends UFDatabase<RowDataPacket> {
   // region private variables
 
   /**
@@ -257,13 +257,7 @@ class UFMysqlDatabase extends UFDatabase<RowDataPacket> {
     }
   }
 
-// endregion
+  // endregion
 }
-
-// endregion
-
-// region exports
-
-export {UFMysqlDatabase};
 
 // endregion

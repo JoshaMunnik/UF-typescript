@@ -1,7 +1,9 @@
+// region types
+
 /**
  * {@link UFObject} implements various support methods for objects.
  */
-class UFObject {
+export class UFObject {
   // region public methods
 
   /**
@@ -211,11 +213,5 @@ class UFObject {
   }
 
 }
-
-// endregion
-
-// region exports
-
-export {UFObject};
 
 // endregion

@@ -1,7 +1,7 @@
 /**
- * {@link IUFModel}} defines the minimal methods a model class should implement.
+ * {@link IUFModel} defines the minimal methods a model class should implement.
  */
-export default interface IUFModel {
+export interface IUFModel {
   /**
    * Gets a value of a property.
    *

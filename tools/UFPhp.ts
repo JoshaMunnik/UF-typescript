@@ -10,7 +10,7 @@ import {access, readFile} from 'fs/promises';
 /**
  * {@link UFPhp} contains support methods related to PHP.
  */
-class UFPhp {
+export class UFPhp {
   // region public methods
 
   /**
@@ -63,11 +63,5 @@ class UFPhp {
     }
   }
 }
-
-// endregion
-
-// region exports
-
-export {UFPhp};
 
 // endregion

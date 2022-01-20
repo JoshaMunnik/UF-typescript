@@ -56,7 +56,7 @@ class Offset {
 /**
  * {@link UFTimezone} is a utility class to handle php timezones.
  */
-class UFTimezone {
+export class UFTimezone {
   // region private variables
 
   /**
@@ -1091,11 +1091,5 @@ class UFTimezone {
 
   // endregion
 }
-
-// endregion
-
-// region exports
-
-export {UFTimezone};
 
 // endregion

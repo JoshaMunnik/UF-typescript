@@ -22,20 +22,20 @@
  * SUCH DAMAGE.
  */
 
-// region Imports
+// region imports
 
 import {UFMath} from './UFMath';
 import {UFObject} from './UFObject';
 
 // endregion
 
-// region Default export
+// region types
 
 /**
  * Defines a static class {@link UFArray}, a utility library with static methods for Array instances.
  */
-export default class UFArray {
-  // region Public methods
+export class UFArray {
+  // region public methods
 
   /**
    * Swaps two elements in an array.
