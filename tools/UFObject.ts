@@ -1,48 +1,58 @@
 /**
- * @version 1
- * @author Josha Munnik
- * @copyright Copyright (c) 2019 Ultra Force Development
- * @license
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- * <ul>
- * <li>Redistributions of source code must retain the above copyright notice, this list of conditions and
- *     the following disclaimer.</li>
- * <li>The authors and companies name may not be used to endorse or promote products derived from this
- *     software without specific prior written permission.</li>
- * </ul>
- * <br/>
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
+ * {@link UFObject} implements various support methods for objects.
  */
-
-/**
- * {@link UFObject} is a static class that implements Object related support methods.
- */
-export class UFObject {
-
+class UFObject {
   // region public methods
 
   /**
-   * Get a property value, use default value if property is missing.
+   * Gets a property or throws an error if the property is missing.
    *
-   * @param anObject
-   *   Object to check
-   * @param aName
-   *   Property name to get
-   * @param aDefaultValue
-   *   Value to return if property is missing
+   * @param {*} anObject
+   *   Object to get property from
+   * @param {string} aPropertyName
+   *   Property to get
    *
-   * @return The value or aDefaultValue
+   * @return {*} value of property
+   *
+   * @throws an error if the object does not contain the property
    */
-  static getProperty<T>(anObject: any, aName: string, aDefaultValue: T): T {
-    return anObject.hasOwnProperty(aName) ? anObject[aName] : aDefaultValue;
+  static getOrFail(anObject: any, aPropertyName: string): any {
+    if (anObject.hasOwnProperty(aPropertyName)) {
+      return anObject[aPropertyName];
+    }
+    throw new Error(`Missing ${aPropertyName} in object`);
+  }
+
+  /**
+   * Gets a property as a certain type or throws an error if the property is missing.
+   *
+   * @param {*} anObject
+   *   Object to get property from
+   * @param {string} aPropertyName
+   *   Property to get
+   *
+   * @return {*} value of property
+   *
+   * @throws an error if the object does not contain the property
+   */
+  static getOrFailAs<T>(anObject: any, aPropertyName: string): T {
+    return UFObject.getOrFail(anObject, aPropertyName) as T;
+  }
+
+  /**
+   * Gets a property from an object and typecast it to a type.
+   *
+   * @param {*} anObject
+   *   Object to get property from
+   * @param {string} aPropertyName
+   *   Property to get
+   * @param {T} aDefault
+   *   Default value to use
+   *
+   * @return {T} value from property or aDefault if it does not exist
+   */
+  static getAs<T>(anObject: any, aPropertyName: string, aDefault: T): T {
+    return anObject.hasOwnProperty(aPropertyName) ? anObject[aPropertyName] as T : aDefault;
   }
 
   /**
@@ -100,7 +110,8 @@ export class UFObject {
         }
       }
     }
-    // all properties passed the test, so aSource matched all properties in aMatch
+    // all properties passed the test, so aSource matched
+    // all properties in aMatch
     return true;
   }
 
@@ -199,5 +210,12 @@ export class UFObject {
     return anObject;
   }
 
-  // endregion
 }
+
+// endregion
+
+// region exports
+
+export {UFObject};
+
+// endregion

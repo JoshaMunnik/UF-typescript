@@ -22,13 +22,13 @@
  * SUCH DAMAGE.
  */
 
-// region imports
+// region Imports
 
-import {IUFModel} from "../models/IUFModel";
+import IUFModel from "../models/IUFModel";
 
 // endregion
 
-// region private constants
+// region Private constants
 
 /**
  * Number of days in a month. The first month starts at 1.
@@ -44,7 +44,7 @@ const INT_NUMBER: RegExp = /\d+/;
 
 // endregion
 
-// region types
+// region Exports
 
 /**
  * A function interface to validate a value.
@@ -95,6 +95,10 @@ export interface IUFPropertyValidator {
   isValidPropertyValue(aPropertyName: string, aData: IUFModel, aValue: any): boolean;
 }
 
+// endregion
+
+// region Default export
+
 /**
  * {@link UFValidators} defines various static methods to validate values.
  *
@@ -102,8 +106,8 @@ export interface IUFPropertyValidator {
  * - the isXXXX(*) methods perform an immediate validation of a value.
  * - the createXXXX methods create and return a validation function to validate a value.
  */
-export class UFValidators {
-  // region validator functions
+export default class UFValidators {
+  // region Validator functions
 
   /**
    * Checks if a text contains at least one non space character.
@@ -196,7 +200,7 @@ export class UFValidators {
 
   // endregion
 
-  // region validator creation functions
+  // region Validator creation functions
 
   /**
    * Creates a validator function that checks if a value matches a regular expression.
@@ -386,7 +390,7 @@ export class UFValidators {
 
   // endregion
 
-  // region support methods
+  // region Support methods
 
   /**
    * Checks if value is valid.

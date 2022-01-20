@@ -24,14 +24,9 @@
 
 // region Imports
 
-import {UFArray} from '../tools/UFArray';
-import {
-  IUFPropertyValidator,
-  IUFValidateValue,
-  IUFValueValidator,
-  UFValidators
-} from "../tools/UFValidators";
-import {IUFModel} from "./IUFModel";
+import UFArray from '../tools/UFArray';
+import UFValidators, {IUFPropertyValidator, IUFValidateValue, IUFValueValidator} from "../tools/UFValidators";
+import IUFModel from "./IUFModel";
 
 // endregion
 
@@ -46,7 +41,7 @@ class PropertyMetaData {
 
 // endregion
 
-// region types
+// region Exports
 
 /**
  * Function template a listener function must use
@@ -64,10 +59,14 @@ export interface IUFModelChangeListener {
   (sender: UFModel, properties: string[]): void
 }
 
+// endregion
+
+// region Default export
+
 /**
- * {@link UFModel} implements {@link IUFModel} and adds support change events.
+ * {@link UFModel} implements {@link IUFModel} and adds support change events and dirty state.
  */
-export class UFModel implements IUFModel {
+export default class UFModel implements IUFModel {
   // region Private variables
 
   /**
@@ -78,7 +77,12 @@ export class UFModel implements IUFModel {
   /**
    * List of property names that have changed while model has been locked.
    */
-  private m_changedList: string[] = [];
+  private m_changedList: Set<string> = new Set();
+
+  /**
+   * List of property names that have changed since last call to {@link clearDirty}.
+   */
+  private m_dirtyList: Set<string> = new Set();
 
   /**
    * Registered change listeners
@@ -107,18 +111,18 @@ export class UFModel implements IUFModel {
   }
 
   /**
-   * Unlocks the model instance. If a call matches the first call to {@link UFModel#lock} call
+   * Unlocks the model instance. If a call matches the first call to {@link lock} call
    * {@link onPropertiesChanged} if there are any pending changes.
    *
    * @return current lock count
    */
   unlock(): number {
     this.m_lockCount--;
-    if ((this.m_lockCount === 0) && (this.m_changedList.length > 0)) {
+    if ((this.m_lockCount === 0) && (this.m_changedList.size > 0)) {
       // make copy
-      const list: string[] = this.m_changedList.slice();
+      const list: string[] = [...this.m_changedList.values()];
       // clear list
-      this.m_changedList.length = 0;
+      this.m_changedList.clear();
       // call callback
       this.onPropertiesChanged(list);
     }
@@ -143,6 +147,41 @@ export class UFModel implements IUFModel {
    */
   removeChangeListener(aCallback: IUFModelChangeListener) {
     UFArray.removeItem(this.m_listeners, aCallback);
+  }
+
+  /**
+   * Checks if there are changed properties. This method only is useful while the data is locked. Else the method
+   * will always return false.
+   *
+   * @returns {boolean} true if there is a changed property.
+   */
+  hasChanged(): boolean {
+    return this.m_changedList.size > 0;
+  }
+
+  /**
+   * Checks if there are dirty properties.
+   *
+   * @returns {boolean} true if there is a dirty property.
+   */
+  isDirty(): boolean {
+    return this.m_dirtyList.size > 0;
+  }
+
+  /**
+   * Gets all dirty properties.
+   *
+   * @returns {string[]} a list of dirty property names.
+   */
+  getDirtyProperties(): string[] {
+    return [...this.m_dirtyList.values()];
+  }
+
+  /**
+   * Clears the dirty state.
+   */
+  clearDirty(): void {
+    this.m_dirtyList.clear();
   }
 
   // endregion
@@ -180,7 +219,7 @@ export class UFModel implements IUFModel {
   /**
    * Sets a property to a value. The method checks if the property is a function. If it is, the method
    * will call the function passing the value as parameter. Else the method will assign the value
-   * directly and call {@link UFModel#changed}.
+   * directly and call {@link changed}.
    *
    * @param aName
    *   Property name
@@ -273,9 +312,8 @@ export class UFModel implements IUFModel {
   }
 
   /**
-   * This method can be called when a property changes value. If the instance is locked via
-   * [[UFModel#lock]] the names are stored. Else the [[UFModel#onPropertiesChanged]] method is called
-   * with the list of names.
+   * This method can be called when a property changes value. If the instance is locked via {@link lock} the names are
+   * stored. Else the {@link onPropertiesChanged} method is called with the list of names.
    *
    * The function accepts a variable number of name parameters
    *
@@ -283,12 +321,9 @@ export class UFModel implements IUFModel {
    *   One or more property names that changed
    */
   protected changed(...aNames: string[]) {
+    aNames.forEach(name => this.m_dirtyList.add(name));
     if (this.m_lockCount > 0) {
-      aNames.forEach(name => {
-        if (this.m_changedList.indexOf(name) < 0) {
-          this.m_changedList.push(name);
-        }
-      });
+      aNames.forEach(name => this.m_changedList.add(name));
     }
     else {
       this.onPropertiesChanged(aNames);
@@ -315,7 +350,7 @@ export class UFModel implements IUFModel {
   // region Private methods
 
   /**
-   * Gets meta data for property name. Creates a meta data record if none exists for the property.
+   * Gets metadata for property name. Creates a metadata record if none exists for the property.
    *
    * @param aPropertyName
    *   Name of property
@@ -345,3 +380,10 @@ export class UFModel implements IUFModel {
 }
 
 // endregion
+
+// region exports
+
+export {UFModel};
+
+// endregion
+

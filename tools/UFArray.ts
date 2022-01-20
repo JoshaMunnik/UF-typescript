@@ -22,20 +22,20 @@
  * SUCH DAMAGE.
  */
 
-// region imports
+// region Imports
 
 import {UFMath} from './UFMath';
 import {UFObject} from './UFObject';
 
 // endregion
 
-// region types
+// region Default export
 
 /**
- * Defines a static class {@link UFArray}, an utilities' library with static methods for Array instances.
+ * Defines a static class {@link UFArray}, a utility library with static methods for Array instances.
  */
-export class UFArray {
-  // region public methods
+export default class UFArray {
+  // region Public methods
 
   /**
    * Swaps two elements in an array.
@@ -59,12 +59,14 @@ export class UFArray {
   /**
    * Randomly swaps elements in array, shuffling the contents of the array.
    *
-   * @param anArray
+   * @template T
+   *
+   * @param {T[]} anArray
    *   Array to shuffle
    * @param [anIterations]
    *   Number of times to perform swap. If the value is not set, it will be set to 1.5 * length of the array.
    *
-   * @returns value of anArray
+   * @returns {T[]} value of anArray
    */
   static shuffle<T>(anArray: T[], anIterations?: number): T[] {
     // arrays with 0 or 1 elements do need shuffling
@@ -73,17 +75,15 @@ export class UFArray {
     }
     // default is 1.5 the length of the array
     anIterations = anIterations || Math.ceil(anArray.length * 1.5);
-    // shortcut to function
-    const randomInt: (value: number) => number = UFMath.randomInt;
     // swap to random items
     for(let index: number = anIterations; index >= 0; index--) {
       // get two random positions in array
-      let index0: number = randomInt(anArray.length);
-      let index1: number = randomInt(anArray.length);
+      let index0: number = UFMath.randomInteger(anArray.length);
+      let index1: number = UFMath.randomInteger(anArray.length);
       // repeat for second index in case the random indexes point to the same index assuming the chance
       // to get the same number for the third time is very low)
       if (index0 === index1) {
-        index1 = randomInt(anArray.length);
+        index1 = UFMath.randomInteger(anArray.length);
       }
       // swap items
       UFArray.swap(anArray, index0, index1);
@@ -151,7 +151,7 @@ export class UFArray {
    * @returns random item
    */
   static randomItem<T>(anArray: T[]): T {
-    return anArray[UFMath.randomInt(anArray.length)];
+    return anArray[UFMath.randomInteger(anArray.length)];
   }
 
   /**
@@ -183,7 +183,7 @@ export class UFArray {
    * Removes duplicate entries.
    *
    * @param anArray
-   *   Array to go trough
+   *   Array to go through
    *
    * @returns anArray with duplicates removed.
    */
