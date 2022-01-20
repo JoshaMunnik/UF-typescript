@@ -9,7 +9,7 @@ import {UFMath} from "./UFMath";
 /**
  * {@link UFText} implements methods for supporting strings and characters.
  */
-class UFText {
+export class UFText {
   // region private vars
 
   /**
@@ -136,11 +136,5 @@ class UFText {
   }
 
 }
-
-// endregion
-
-// region exports
-
-export {UFText};
 
 // endregion

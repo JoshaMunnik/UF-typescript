@@ -26,7 +26,7 @@ interface IUFSqlParameterCallback {
  *
  * @template TRow
  */
-abstract class UFDatabase<TRow> {
+export abstract class UFDatabase<TRow> {
   // region public methods
 
   /**
@@ -357,11 +357,5 @@ abstract class UFDatabase<TRow> {
 
   // endregion
 }
-
-// endregion
-
-// region exports
-
-export {UFDatabase};
 
 // endregion

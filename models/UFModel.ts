@@ -22,15 +22,20 @@
  * SUCH DAMAGE.
  */
 
-// region Imports
+// region imports
 
-import UFArray from '../tools/UFArray';
-import UFValidators, {IUFPropertyValidator, IUFValidateValue, IUFValueValidator} from "../tools/UFValidators";
-import IUFModel from "./IUFModel";
+import {UFArray} from '../tools/UFArray';
+import {
+  IUFPropertyValidator,
+  IUFValidateValue,
+  IUFValueValidator,
+  UFValidators
+} from "../tools/UFValidators";
+import {IUFModel} from "./IUFModel";
 
 // endregion
 
-// region Private types
+// region private types
 
 /**
  * Internal class, contains property meta data.
@@ -41,7 +46,7 @@ class PropertyMetaData {
 
 // endregion
 
-// region Exports
+// region types
 
 /**
  * Function template a listener function must use
@@ -61,12 +66,12 @@ export interface IUFModelChangeListener {
 
 // endregion
 
-// region Default export
+// region default export
 
 /**
  * {@link UFModel} implements {@link IUFModel} and adds support change events and dirty state.
  */
-export default class UFModel implements IUFModel {
+export class UFModel implements IUFModel {
   // region Private variables
 
   /**
@@ -96,7 +101,7 @@ export default class UFModel implements IUFModel {
 
   // endregion
   
-  // region Public methods
+  // region public methods
 
   /**
    * Locks the model instance, preventing changed events from being fired. An internal lock counter is
@@ -380,10 +385,3 @@ export default class UFModel implements IUFModel {
 }
 
 // endregion
-
-// region exports
-
-export {UFModel};
-
-// endregion
-

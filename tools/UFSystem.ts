@@ -1,9 +1,9 @@
 // region class
 
 /**
- * {@link UFMath} implements system related methods.
+ * {@link UFSystem} implements system related methods.
  */
-class UFSystem {
+export class UFSystem {
   // region public methods
 
   /**
@@ -17,11 +17,5 @@ class UFSystem {
     return Math.floor(new Date().getTime() / 1000);
   }
 }
-
-// endregion
-
-// region exports
-
-export {UFSystem};
 
 // endregion

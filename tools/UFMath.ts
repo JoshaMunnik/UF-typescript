@@ -3,7 +3,7 @@
 /**
  * {@link UFMath} implements methods supporting numbers.
  */
-class UFMath {
+export class UFMath {
   // region public methods
 
   /**
@@ -24,11 +24,5 @@ class UFMath {
     return Math.floor(aMinOrMax + Math.random() * (aMax - aMinOrMax + 1));
   }
 }
-
-// endregion
-
-// region exports
-
-export {UFMath};
 
 // endregion

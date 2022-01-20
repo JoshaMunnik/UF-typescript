@@ -7,7 +7,7 @@
  * @template TKey
  * @template TValue
  */
-class UFMapOfSet<TKey, TValue> {
+export class UFMapOfSet<TKey, TValue> {
   // region private variables
 
   /**
@@ -107,11 +107,5 @@ class UFMapOfSet<TKey, TValue> {
 
   // endregion
 }
-
-// endregion
-
-// region exports
-
-export {UFMapOfSet}
 
 // endregion
