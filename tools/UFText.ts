@@ -132,7 +132,48 @@ export class UFText {
    * @private
    */
   static threeDigits(aNumber: number): string {
-    return ('000' + aNumber.toString()).substr(-3);
+    return ('000' + aNumber.toString()).substring(-3);
+  }
+
+  /**
+   * Replace all keys by their value in a string.
+   *
+   * @param {string} aText
+   *   Text to update
+   * @param {Object} aMap
+   *   Replace keys with their values
+   *
+   * @return {string} Updated aText
+   */
+  static replace(aText: string, aMap: object): string {
+    for (const [key, value] of Object.entries(aMap)) {
+      aText = aText.replace(key, value);
+    }
+    return aText;
+  }
+
+  /**
+   * Returns a number converted to a hex number of two digits.
+   *
+   * @param {number} aNumber
+   *   Number to convert (will be clamped between 0 and 255)
+   *
+   * @return {string} hexadecimal string of 2 digits
+   */
+  static hexTwoDigits(aNumber: number): string {
+    return ('0' + Math.min(255, Math.max(0, aNumber)).toString(16)).substring(-2);
+  }
+
+  /**
+   * Returns a number converted to a hex number of four digits.
+   *
+   * @param {number} aNumber
+   *   Number to convert (will be clamped between 0 and 65535)
+   *
+   * @return {string} hexadecimal string of 4 digits
+   */
+  static hexFourDigits(aNumber: number): string {
+    return ('000' + Math.min(65535, Math.max(0, aNumber)).toString(16)).substring(-4);
   }
 
 }
