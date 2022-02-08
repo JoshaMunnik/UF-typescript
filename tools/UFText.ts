@@ -176,6 +176,25 @@ export class UFText {
     return ('000' + Math.min(65535, Math.max(0, aNumber)).toString(16)).substring(-4);
   }
 
+  /**
+   * Converts a html formatted text to a plain text.
+   *
+   * Based on code from:
+   * https://javascript.plainenglish.io/3-ways-to-convert-html-text-to-plain-text-strip-off-the-tags-from-the-string-4c947feb8a8c
+   *
+   * @param {string} aHtmlText
+   *   Html text to format
+   *
+   * @returns {string} plain version of the text
+   */
+  static convertToPlain(aHtmlText: string): string {
+    // Create a new div element
+    const tempDivElement = document.createElement("div");
+    // Set the HTML content with the given value
+    tempDivElement.innerHTML = aHtmlText;
+    // Retrieve the text property of the element
+    return tempDivElement.textContent || tempDivElement.innerText || "";
+  }
 }
 
 // endregion
