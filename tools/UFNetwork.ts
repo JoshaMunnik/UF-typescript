@@ -51,14 +51,19 @@ export class UFNetwork {
    *   Method used
    * @param aPath
    *   Path to API call
-   * @param [aBody=null]
-   *   Body data
+   * @param aReceivedBody
+   *   Body data received
    */
-  static logApiResult(aResponse: Response, aMethod: UFFetchMethod, aPath: string, aBody: string | object | null = null) {
+  static logApiResult(
+    aResponse: Response,
+    aMethod: UFFetchMethod,
+    aPath: string,
+    aReceivedBody: string | object | null = null
+  ) {
     UFNetwork.startApiGroup('API result', aMethod, aPath);
     console.log('status', aResponse.status, aResponse.statusText);
-    if (aBody) {
-      console.log('body', aBody);
+    if (aReceivedBody) {
+      console.log('received', aReceivedBody);
     }
     UFNetwork.endApiGroup(aPath);
   }
@@ -87,14 +92,15 @@ export class UFNetwork {
    * @param anUrl
    *   Url to call
    * @param aBodyData
-   *   Optional body data, when set it will be converted to JSON and the content type is updated.
+   *   Optional body data; if it is a {@link FormData} instance it just get set, else the data is sent as JSON.
    * @param anUpdateHeaders
    *   Optional callback to add additional headers.
    *
    * @returns options for use with {@link fetch}
    */
   static buildFetchOptions(
-    aMethod: UFFetchMethod, anUrl: string, aBodyData?: object | null, anUpdateHeaders?: (headers: Headers) => any
+    aMethod: UFFetchMethod, anUrl: string, aBodyData?: object | FormData | null,
+    anUpdateHeaders?: (headers: Headers) => any
   ): RequestInit {
     UFNetwork.startApiGroup('API', aMethod, anUrl);
     const headers = new Headers();
@@ -102,8 +108,13 @@ export class UFNetwork {
       method: aMethod
     };
     if (aBodyData) {
-      headers.append("Content-Type", 'application/json');
-      options.body = JSON.stringify(aBodyData);
+      if (aBodyData instanceof FormData) {
+        options.body = aBodyData;
+      }
+      else {
+        headers.append("Content-Type", 'application/json');
+        options.body = JSON.stringify(aBodyData);
+      }
       console.log('body', aBodyData);
     }
     if (anUpdateHeaders) {
