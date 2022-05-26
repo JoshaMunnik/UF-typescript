@@ -31,6 +31,30 @@ export class UFDate {
       + UFText.twoDigits(aDate.getMinutes()) + ':'
       + UFText.twoDigits(aDate.getSeconds());
   }
+
+  /**
+   * Returns the newest date.
+   *
+   * @param {Date} aDates
+   *   One or more dates.
+   *
+   * @returns {Date}
+   */
+  static max(...aDates: Date[]): Date {
+    return aDates.reduce((first, second) => first < second ? first : second);
+  }
+
+  /**
+   * Returns the oldest date.
+   *
+   * @param {Date} aDates
+   *   One or more dates.
+   *
+   * @returns {Date}
+   */
+  static min(...aDates: Date[]): Date {
+    return aDates.reduce((first, second) => first > second ? first : second);
+  }
 }
 
 // endregion
