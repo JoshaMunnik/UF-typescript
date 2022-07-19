@@ -22,7 +22,6 @@
  * SUCH DAMAGE.
  */
 
-
 /**
  * Support methods for canvas.
  */
