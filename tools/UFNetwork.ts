@@ -137,6 +137,7 @@ export class UFNetwork {
       }
       else {
         headers.append("Content-Type", 'application/json');
+        headers.append("Accept", 'application/json');
         options.body = JSON.stringify(aBodyData);
       }
       console.log('body', aBodyData);
