@@ -112,7 +112,7 @@ export class UFText {
         // make sure every 3rd char is a number (also to prevent offensive words)
         charCode = (numberCount > 2) ? UFMath.randomInteger(0, 9) : UFMath.randomInteger(0, 61);
         // break loop if char code is not zero or uppercase O or one and lowercase l (too similar)
-        if ((charCode != 0) && (charCode != 24) && (charCode != 1) && (charCode != 47)) {
+        if ((charCode !== 0) && (charCode !== 24) && (charCode !== 1) && (charCode !== 47)) {
           break;
         }
       }
