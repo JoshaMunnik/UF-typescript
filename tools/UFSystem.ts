@@ -38,7 +38,7 @@ export class UFSystem {
    * @return {number} seconds
    */
   static time(): number {
-    return Math.floor(new Date().getTime() / 1000);
+    return Math.floor(Date.now() / 1000);
   }
 }
 
