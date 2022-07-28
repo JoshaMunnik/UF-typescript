@@ -219,6 +219,40 @@ export class UFText {
     // Retrieve the text property of the element
     return tempDivElement.textContent || tempDivElement.innerText || "";
   }
+
+  /**
+   * Joins strings making sure there is one delimiter string between them.
+   *
+   * @param aDelimiter
+   *   Delimiter to use
+   * @param aTexts
+   *   Texts to join
+   *
+   * @return {string} aTexts joined together
+   */
+  static join(aDelimiter: string, ...aTexts: string[]): string {
+    return aTexts.reduce((previous, current) => {
+      if (current.startsWith(aDelimiter)) {
+        current = current.substring(aDelimiter.length);
+      }
+      if (!previous.endsWith(aDelimiter) && previous.length) {
+        previous += aDelimiter;
+      }
+      return previous + current;
+    });
+  }
+
+  /**
+   * Joins strings together using '/' as a delimiter.
+   *
+   * @param aTexts
+   *   Texts to join
+   *
+   * @return {string} aTexts joined together
+   */
+  static joinPath(...aTexts: string[]): string {
+    return this.join('/', ...aTexts);
+  }
 }
 
 // endregion
