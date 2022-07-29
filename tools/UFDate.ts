@@ -79,6 +79,20 @@ export class UFDate {
   static min(...aDates: Date[]): Date {
     return aDates.reduce((first, second) => first > second ? first : second);
   }
+
+  /**
+   * Returns a 24-hour day in milliseconds.
+   */
+  static get DAY_IN_MILLISECONDS() {
+    return 24 * 60 * 60 * 1000;
+  }
+
+  /**
+   * Returns one hour in milliseconds.
+   */
+  static get HOUR_IN_MILLISECONDS() {
+    return 60 * 60 * 1000;
+  }
 }
 
 // endregion
