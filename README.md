@@ -13,7 +13,7 @@ The code in this repository does not depend on any other libraries (like react o
 Add as submodule (run from root of Git project):
 ````
 git submodule add https://github.com/JoshaMunnik/UF-typescript src/UF
-git submodule update --init --recursive  
+git submodule update --init --recursive --remote
 ````
 
 This assumes all source files in the `src` folder.
