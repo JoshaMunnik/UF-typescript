@@ -12,7 +12,7 @@
  *     software without specific prior written permission.</li>
  * </ul>
  * <br/>
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS`` AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
@@ -228,7 +228,7 @@ export class UFText {
    * @param aTexts
    *   Texts to join
    *
-   * @return {string} aTexts joined together
+   * @return aTexts joined together
    */
   static join(aDelimiter: string, ...aTexts: string[]): string {
     return aTexts.reduce((previous, current) => {
@@ -248,10 +248,43 @@ export class UFText {
    * @param aTexts
    *   Texts to join
    *
-   * @return {string} aTexts joined together
+   * @return aTexts joined together
    */
   static joinPath(...aTexts: string[]): string {
     return this.join('/', ...aTexts);
+  }
+
+  /**
+   * Gets the text to convert a number to an english ordinal number.
+   *
+   * @param aNumber
+   *   Number to convert.
+   *
+   * @return Text to add to the number.
+   */
+  static getOrdinalPost(aNumber: number): string {
+    switch(aNumber % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  /**
+   * Converts a number to an english ordinal number.
+   *
+   * @param aNumber
+   *   Number to convert.
+   *
+   * @return number with shortened ordinal text added to it.
+   */
+  static getOrdinalNumber(aNumber: number): string {
+    return aNumber.toString() + this.getOrdinalPost(aNumber);
   }
 }
 
