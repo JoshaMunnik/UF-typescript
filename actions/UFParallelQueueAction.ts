@@ -36,15 +36,16 @@ import {UFText} from "../tools/UFText";
 // region exports
 
 /**
- * {@link UFParallelQueueAction} implements an action queue that can run a number of actions at the same time.
+ * {@link UFParallelQueueAction} implements an action queue that can run a number of {@link UFQueueableAction} actions
+ * at the same time.
  *
- * It extends {@link UFQueueableAction} so the queue can be placed into other queues if needed.
+ * It extends {@link UFQueueableAction} itself so the queue can be placed into other queues if needed.
  */
 export class UFParallelQueueAction extends UFQueueableAction {
   // region private vars
 
   /**
-   * Original actions list
+   * Actions list
    *
    * @private
    */
@@ -53,7 +54,7 @@ export class UFParallelQueueAction extends UFQueueableAction {
   /**
    * Current promises being resolved.
    *
-   * Since {@link Promise.race} does return the result of the promise, store the promises together with the index of
+   * Since {@link Promise.race} does return the result of a promise, store the promises together with the index of
    * the action. The promise will return the same index value, so it can be removed from the map once it has finished.
    *
    * @private
@@ -61,7 +62,7 @@ export class UFParallelQueueAction extends UFQueueableAction {
   private readonly m_activePromises: Map<number, Promise<number>> = new Map();
 
   /**
-   * Maximum number of actions to run concurrently
+   * Maximum number of actions to run concurrently.
    *
    * @private
    */
@@ -100,13 +101,13 @@ export class UFParallelQueueAction extends UFQueueableAction {
   // region public methods
 
   /**
-   * Constructs an instance of {@link UFParallelQueueAction} that will run a certain number of actions at the same time.
+   * Constructs an instance of {@link UFParallelQueueAction} that will run a certain number of {@link UFQueueableAction}
+   * at the same time.
    *
    * @param aConcurrentCount
    *   Maximum number of actions that should run at the same time.
    * @param anActions
    *   One or more actions to run
-   * @protected
    */
   constructor(aConcurrentCount: number, ...anActions: IUFQueueableAction[]) {
     super();
@@ -202,7 +203,7 @@ export class UFParallelQueueAction extends UFQueueableAction {
   // region private methods
 
   /**
-   * Runs all actions.
+   * Starts running actions until all actions have finished running or the token is requesting cancellation.
    *
    * @param aTokenSource
    *   Will be cancelled if an action returned false or generated an error.
@@ -221,7 +222,8 @@ export class UFParallelQueueAction extends UFQueueableAction {
   }
 
   /**
-   * Waits for one of the active promises to resolve.
+   * Waits for one of the active promises to resolve. The resolved promise will be removed from the active promises
+   * list.
    *
    * @private
    */
@@ -231,7 +233,8 @@ export class UFParallelQueueAction extends UFQueueableAction {
   }
 
   /**
-   * Keep adding promises to the active list until the concurrent maximum is reached or the action has been cancelled.
+   * Keep adding promises from {@link runAction} to the active list until the concurrent maximum is reached or there are
+   * no more actions or the token is requesting a cancellation.
    *
    * @param aTokenSource
    */
@@ -251,34 +254,34 @@ export class UFParallelQueueAction extends UFQueueableAction {
   /**
    * Runs an action. If the action returned false or threw an exception, call cancel on the token source.
    *
+   * The returned promise will always resolve and never reject.
+   *
    * @param anIndex
    *   Index to running action
    * @param aTokenSource
    *   Token source that will be cancelled if an error occurred or action returned false.
    *
-   * @return index of action (value of anIndex)
+   * @return a promise that will return the index of the action (same value as anIndex)
    *
    * @private
    */
   private async runAction(anIndex: number, aTokenSource: UFCancellationTokenSource): Promise<number> {
-    // get action and store it in the running list while it is active
     const action = this.m_actions[anIndex];
     let actionResult: boolean;
     try {
       actionResult = await action.run(aTokenSource.token);
     } catch (error: any) {
-      // an error will also stop all other actions
+      // an error results in a running failure
       actionResult = false;
       this.m_errorMessage = UFText.append(this.m_errorMessage, `${error.name}: ${error.message}`, ',');
     }
-    // either cancel all other actions or increase progress weight
+    // request cancellation if the action did not run successful
     if (!actionResult) {
       aTokenSource.cancel();
     }
     else {
       this.m_doneProgressWeight += UFProgressTools.getProgressWeight(action);
     }
-    // return index of action
     return anIndex;
   }
 
