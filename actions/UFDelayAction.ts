@@ -44,6 +44,13 @@ export class UFDelayAction extends UFQueueableAction {
    */
   private readonly m_delay: number;
 
+  /**
+   * See {@link progress}
+   *
+   * @private
+   */
+  private m_progress: number = 0.0;
+
   // region public methods
 
   /**
@@ -65,7 +72,27 @@ export class UFDelayAction extends UFQueueableAction {
    * @inheritDoc
    */
   run(aToken: IUFCancellationToken): Promise<boolean> {
-    return new Promise(resolve => setTimeout(resolve, this.m_delay, true));
+    this.m_progress = 0.0;
+    return new Promise(
+      resolve => setTimeout(
+        () => {
+          this.m_progress = 1.0;
+          resolve(true)
+        },
+        this.m_delay
+      )
+    );
+  }
+
+  // endregion
+
+  // region IUFProgress
+
+  /**
+   * @inheritDoc
+   */
+  get progress(): number {
+    return this.m_progress;
   }
 
   // endregion
