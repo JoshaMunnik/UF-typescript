@@ -108,7 +108,7 @@ export class UFParallelQueueAction extends UFQueueableAction {
    *   One or more actions to run
    * @protected
    */
-  protected constructor(aConcurrentCount: number, ...anActions: IUFQueueableAction[]) {
+  constructor(aConcurrentCount: number, ...anActions: IUFQueueableAction[]) {
     super();
     this.m_actions = anActions;
     this.m_concurrentCount = aConcurrentCount;
