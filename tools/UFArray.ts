@@ -151,7 +151,7 @@ export class UFArray {
    * @returns random item
    */
   static randomItem<T>(anArray: T[]): T {
-    return anArray[UFMath.randomInteger(anArray.length)];
+    return anArray[UFMath.randomInteger(anArray.length - 1)];
   }
 
   /**
@@ -227,7 +227,7 @@ export class UFArray {
    *
    * @returns index of entry or -1 if none was found
    */
-  static findByProperty(anArray: object[], aMatch: object, anIgnoreCase: boolean) {
+  static findByProperty(anArray: object[], aMatch: object, anIgnoreCase: boolean = false) {
     return anArray.findIndex(item => UFObject.equalProperties(item, aMatch, anIgnoreCase));
   }
 
@@ -310,11 +310,17 @@ export class UFArray {
    *
    * @returns anArray value
    */
-  static replaceMultiple<T>(anArray: T[], aSearchValues: T[], aNewValues: T[]): T[] {
+  static replaceMultiple<T>(anArray: T[], aSearchValues: T[], aNewValues: T[]|T): T[] {
+    const isArray = Array.isArray(aNewValues);
     for (let index = anArray.length - 1; index >= 0; index--) {
       const findIndex = aSearchValues.indexOf(anArray[index]);
       if (findIndex >= 0) {
-        anArray[index] = aNewValues[findIndex];
+        if (isArray) {
+          anArray[index] = aNewValues[findIndex];
+        }
+        else {
+          anArray[index] = aNewValues;
+        }
       }
     }
     return anArray;
@@ -331,7 +337,7 @@ export class UFArray {
    * @returns value of aTarget
    */
   static add<T>(aTarget: T[], aSource: T[]): T[] {
-    aTarget.splice.apply(null, [0, aTarget.length, ...aSource]);
+    aTarget.push(...aSource);
     return aTarget;
   }
 
