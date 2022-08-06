@@ -33,17 +33,17 @@ export class UFObject {
   /**
    * Gets a property or throws an error if the property is missing.
    *
-   * @param {*} anObject
+   * @param anObject
    *   Object to get property from
-   * @param {string} aPropertyName
+   * @param aPropertyName
    *   Property to get
    *
-   * @return {*} value of property
+   * @return value of property
    *
    * @throws an error if the object does not contain the property
    */
   static getOrFail(anObject: any, aPropertyName: string): any {
-    if (anObject.hasOwnProperty(aPropertyName)) {
+    if (aPropertyName in anObject) {
       return anObject[aPropertyName];
     }
     throw new Error(`Missing ${aPropertyName} in object`);
@@ -52,12 +52,12 @@ export class UFObject {
   /**
    * Gets a property as a certain type or throws an error if the property is missing.
    *
-   * @param {*} anObject
+   * @param anObject
    *   Object to get property from
-   * @param {string} aPropertyName
+   * @param aPropertyName
    *   Property to get
    *
-   * @return {*} value of property
+   * @return value of property
    *
    * @throws an error if the object does not contain the property
    */
@@ -68,17 +68,17 @@ export class UFObject {
   /**
    * Gets a property from an object and typecast it to a type.
    *
-   * @param {*} anObject
+   * @param anObject
    *   Object to get property from
-   * @param {string} aPropertyName
+   * @param aPropertyName
    *   Property to get
-   * @param {T} aDefault
+   * @param aDefault
    *   Default value to use
    *
-   * @return {T} value from property or aDefault if it does not exist
+   * @return value from property or aDefault if it does not exist
    */
   static getAs<T>(anObject: any, aPropertyName: string, aDefault: T): T {
-    return anObject.hasOwnProperty(aPropertyName) ? anObject[aPropertyName] as T : aDefault;
+    return aPropertyName in anObject ? anObject[aPropertyName] as T : aDefault;
   }
 
   /**
