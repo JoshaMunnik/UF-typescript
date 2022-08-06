@@ -25,8 +25,8 @@
 // region types
 
 /**
- * {@link UFMapOfSet} can be used to store groups of unique values. It uses a map that maps a value to a set. The
- * class takes care of managing the sets.
+ * {@link UFMapOfSet} can be used to store groups of unique values. It uses a {@link Map} that maps a value to a
+ * {@link Set}. The class takes care of managing the sets.
  *
  * @template TKey
  * @template TValue
