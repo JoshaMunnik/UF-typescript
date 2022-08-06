@@ -210,10 +210,10 @@ export class UFParallelQueueAction extends UFQueueableAction {
    * @private
    */
   private async runActions(aTokenSource: UFCancellationTokenSource): Promise<void> {
-    // keep looping while not cancelled and there are still action to add or tasks to wait for
+    // keep looping if there are actions that still can be added or if there are any active actions still running
     while (
-      !aTokenSource.isCancellationRequested
-      && ((this.m_actionIndex < this.m_actions.length) || (this.m_activePromises.size > 0))
+      (!aTokenSource.isCancellationRequested && (this.m_actionIndex < this.m_actions.length)) ||
+      (this.m_activePromises.size > 0)
       ) {
       this.addPromises(aTokenSource);
       await this.waitForPromiseToFinish();
@@ -231,7 +231,7 @@ export class UFParallelQueueAction extends UFQueueableAction {
   }
 
   /**
-   * Keep adding promises to the active list until the concurrent maximum is reached.
+   * Keep adding promises to the active list until the concurrent maximum is reached or the action has been cancelled.
    *
    * @param aTokenSource
    */
