@@ -42,28 +42,33 @@ export class UFNumberList {
   /**
    * Creates an instance of {@link UFNumberList}
    */
-  public constructor() {
-    this.m_numbers = [];
+  public constructor(...aNumbers: number[]) {
+    this.m_numbers = [...aNumbers];
   }
 
   /**
-   * Adds a number to the end of the list.
+   * Adds one or more numbers to the end of the list.
    *
-   * @param aNumber
-   *   Number to add
+   * @param aNumbers
+   *   One or more numbers to add
    */
-  public add(aNumber: number) {
-    this.m_numbers.push(aNumber);
+  public add(...aNumbers: number[]) {
+    this.m_numbers.push(...aNumbers);
   }
 
   /**
    * Adds a list of numbers to the end of the list.
    *
    * @param aNumbers
-   *   Numbers to add
+   *   Numbers to add (either an array or an instance of {@link UFNumberList})
    */
-  public addList(aNumbers: number[]) {
-    aNumbers.forEach(value => this.add(value));
+  public addList(aNumbers: number[] | UFNumberList) {
+    if (Array.isArray(aNumbers)) {
+      this.m_numbers.push(...aNumbers);
+    }
+    else {
+      this.m_numbers.push(...aNumbers.m_numbers);
+    }
   }
 
   /**
@@ -82,7 +87,7 @@ export class UFNumberList {
    * @throws an error if index is invalid
    */
   public get(anIndex: number): number {
-    if ((anIndex  < 0) || (anIndex >= this.size)) {
+    if ((anIndex < 0) || (anIndex >= this.size)) {
       throw new Error(`Invalid index ${anIndex} (size = ${this.size})`);
     }
     return this.m_numbers[anIndex];
@@ -94,7 +99,7 @@ export class UFNumberList {
    * @return maximum number
    */
   public max(): number {
-    return Math.max(...this.m_numbers);
+    return this.size ? Math.max(...this.m_numbers) : 0;
   }
 
   /**
@@ -103,7 +108,7 @@ export class UFNumberList {
    * @return minimum number
    */
   public min(): number {
-    return Math.min(...this.m_numbers);
+    return this.size ? Math.min(...this.m_numbers) : 0;
   }
 
   /**
