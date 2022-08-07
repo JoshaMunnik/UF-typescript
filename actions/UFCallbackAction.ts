@@ -44,6 +44,13 @@ export class UFCallbackAction extends UFQueueableAction {
    */
   private readonly m_callback: () => any;
 
+  /**
+   * See {@link progress}
+   *
+   * @private
+   */
+  private m_progress: number = 0.0;
+
   // endregion
 
   // region public methods
@@ -67,8 +74,21 @@ export class UFCallbackAction extends UFQueueableAction {
    * @inheritDoc
    */
   async run(aToken: IUFCancellationToken): Promise<boolean> {
+    this.m_progress = 0.0;
     this.m_callback();
+    this.m_progress = 1.0;
     return Promise.resolve(true);
+  }
+
+  // endregion
+
+  // region IUFProgress
+
+  /**
+   * @inheritDoc
+   */
+  get progress(): number {
+    return this.m_progress;
   }
 
   // endregion
