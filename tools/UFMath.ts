@@ -99,9 +99,9 @@ export class UFMath {
    *   X coordinate of point to rotate
    * @param aY
    *   Y coordinate of point to rotate
-   * @param [anOriginX=0]
+   * @param anOriginX=0
    *   X coordinate of point to rotate around
-   * @param [anOriginY=0]
+   * @param anOriginY=0
    *   Y coordinate of point to rotate around
    *
    * @returns {{x:Number,y:Number}} An object with x and y property.
@@ -161,9 +161,9 @@ export class UFMath {
   /**
    * Returns a random integer.
    *
-   * @param {number} [aMinOrMax]
+   * @param aMinOrMax
    *   Minimal or maximum value (if aMax is not specified)
-   * @param {number} aMax
+   * @param aMax
    *   Maximal value
    *
    * @return {number} random integer between aMin and aMax (inclusive)
@@ -177,24 +177,24 @@ export class UFMath {
   }
 
   /**
-   * Increases or decreases value so it gets nearer to a target value
+   * Increases or decreases value, so it gets nearer to a target value.
    *
-   * @param aTarget: value to reach
-   * @param aCurrent: current value
-   * @param aStepSize: value to move with
+   * @param aTarget
+   *   Value to reach
+   * @param aCurrent
+   *   Current value
+   * @param aStepSize
+   *   Value to move with
    *
-   * @returns aCurrent +/- aStep or aTarget if aCurrent was closer
-   *   to aTarget then aStep distance
+   * @returns aCurrent +/- aStep or aTarget if aCurrent was closer to aTarget then aStep distance
    */
   static moveTo(aTarget: number, aCurrent: number, aStepSize: number): number {
-    return (aTarget > aCurrent) ? Math.min(aTarget, aCurrent + aStepSize)
-      : Math.max(aTarget, aCurrent - aStepSize);
+    return (aTarget > aCurrent) ? Math.min(aTarget, aCurrent + aStepSize) : Math.max(aTarget, aCurrent - aStepSize);
   }
 
   /**
-   * Calculates a position based on movement over time. The method makes
-   * sure the returned value is between the specified target and starting
-   * values.
+   * Calculates a position based on movement over time. The method makes sure the returned value is between the
+   * specified target and starting values.
    *
    * @param aTarget
    *   Target to move to
@@ -204,7 +204,7 @@ export class UFMath {
    *   Current time
    * @param aTotalTime
    *   Total time movement should take place
-   * @returns {Number} a value between aStart and aTarget (both inclusive)
+   * @returns value between aStart and aTarget (both inclusive)
    */
   static moveOverTime(aTarget: number, aStart: number, aCurrentTime: number, aTotalTime: number): number {
     return aStart + (aTarget - aStart) *
@@ -253,8 +253,7 @@ export class UFMath {
     aX0: number, aY0: number, aWidth0: number, anHeight0: number,
     aX1: number, aY1: number, aWidth1: number, anHeight1: number
   ): boolean {
-    // just check if minimum value in one direction is equal or larger then the maximum value in
-    // that direction
+    // just check if minimum value in one direction is equal or larger than the maximum value in that direction
     return !(
       (aX0 >= aX1 + aWidth1) ||
       (aX1 >= aX0 + aWidth0) ||
@@ -272,7 +271,7 @@ export class UFMath {
    * @param aValue
    *   Value to check
    *
-   * @returns True if value is a valid, otherwise false
+   * @returns true if value is a valid, otherwise false
    */
   static isNumeric(aValue: any): aValue is number | string {
     // parseFloat NaNs numeric-cast false positives (null|true|false|"")
@@ -286,8 +285,11 @@ export class UFMath {
    * Checks if a value is a valid number, if not return a default value instead.
    *
    * @param aValue
-   * @param {number} aDefault
-   * @returns {number}
+   *   Value to check
+   * @param aDefault
+   *   Default value to use if aValue is not a valid number
+   *
+   * @returns either aValue as a number or aDefault
    */
   static getNumber(aValue: any, aDefault: number): number {
     return this.isNumeric(aValue) ? aValue as number : aDefault;
