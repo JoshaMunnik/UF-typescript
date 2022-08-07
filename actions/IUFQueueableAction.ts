@@ -31,16 +31,16 @@ import {IUFCancellationToken} from "./IUFCancellationToken";
 // region exports
 
 /**
- * {@link IUFQueueableAction} defines the interface that every action should implement,
+ * {@link IUFQueueableAction} defines the interface for an asynchronous action.
  */
 export interface IUFQueueableAction {
   /**
    * Runs the action asynchronously.
    *
    * @param aToken
-   *   The token should be checked if the action still can continue
+   *   A cancellation token which the action can check while running if the action still can continue.
    *
-   * @return True if the action was successful, false if the action failed or was cancelled.
+   * @return true if the action was successful, false if the action failed or was cancelled.
    */
   run(aToken: IUFCancellationToken): Promise<boolean>;
 }

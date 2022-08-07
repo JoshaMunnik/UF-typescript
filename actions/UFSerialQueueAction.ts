@@ -32,7 +32,7 @@ import {IUFQueueableAction} from "./IUFQueueableAction";
 // region exports
 
 /**
- * {@link UFSerialQueueAction} can be used to run one or more actions sequentially.
+ * {@link UFSerialQueueAction} can be used to run one or more {@link IUFQueueableAction} sequentially.
  *
  * The class is a subclass of {@link UFParallelQueueAction} using a concurrent count of 1 (so only one action
  * is ran at the time).

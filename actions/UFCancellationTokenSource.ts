@@ -50,7 +50,7 @@ const neverCancelledToken: IUFCancellationToken = {
  * It is possible to link tokens together by supplying other {@link IUFCancellationToken} instances with the
  * constructor.
  *
- * The implementation is based on the .net (c#) implementation.
+ * The naming is based on the .net (c#) implementation.
  */
 export class UFCancellationTokenSource implements IUFCancellationToken {
   // region private variables

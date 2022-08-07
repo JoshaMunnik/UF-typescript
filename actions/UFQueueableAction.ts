@@ -27,27 +27,18 @@
 import {IUFQueueableAction} from "./IUFQueueableAction";
 import {IUFWeightedProgress} from "./IUFWeightedProgress";
 import {IUFCancellationToken} from "./IUFCancellationToken";
-import {UFCancellationTokenSource} from "./UFCancellationTokenSource";
 
 // endregion
 
 // region exports
 
 /**
- * Base class for queueable actions.
+ * A base class implementation of {@link IUFQueueableAction} that can be used to implement actions. It adds support
+ * for {@link IUFWeightedProgress}.
+ *
+ * Subclasses must implement the {@link run} method.
  */
 export abstract class UFQueueableAction implements IUFQueueableAction, IUFWeightedProgress {
-  // region public methods
-
-  /**
-   * Runs the action without a cancellation token.
-   */
-  async uninterruptedRun(): Promise<boolean> {
-    return await this.run(UFCancellationTokenSource.NONE);
-  }
-
-  // endregion
-
   // region IUFWeightedProgress
 
   /**

@@ -36,10 +36,10 @@ import {UFText} from "../tools/UFText";
 // region exports
 
 /**
- * {@link UFParallelQueueAction} implements an action queue that can run a number of {@link UFQueueableAction} actions
+ * {@link UFParallelQueueAction} implements an action queue that can run a number of {@link IUFQueueableAction} actions
  * at the same time.
  *
- * It extends {@link UFQueueableAction} itself so the queue can be placed into other queues if needed.
+ * The class extends {@link UFQueueableAction} so the queue can be placed into other queues if needed.
  */
 export class UFParallelQueueAction extends UFQueueableAction {
   // region private vars
@@ -55,7 +55,7 @@ export class UFParallelQueueAction extends UFQueueableAction {
    * Current promises being resolved.
    *
    * Since {@link Promise.race} does return the result of a promise, store the promises together with the index of
-   * the action. The promise will return the same index value, so it can be removed from the map once it has finished.
+   * the action. The promise should return the same index value, so it can be removed from the map once it has finished.
    *
    * @private
    */
