@@ -46,33 +46,33 @@ export class UFMapOfSet<TKey, TValue> {
   // region public methods
 
   /**
-   * Adds a value to the group for a key.
+   * Adds a value to the group for a key. If the value is already available in the group, nothing changes.
    *
-   * @param {TKey} aKey
+   * @param aKey
    *   Key to add for
-   * @param {TValue} aValue
+   * @param aValue
    *   Value to add to the group of aKey
    */
   add(aKey: TKey, aValue: TValue): void {
     if (!this.m_map.has(aKey)) {
       this.m_map.set(aKey, new Set<TValue>());
     }
-    this.m_map.get(aKey)?.add(aValue);
+    this.m_map.get(aKey)!.add(aValue);
   }
 
   /**
    * Removes a value from the group for a key.
    *
-   * @param {TKey} aKey
+   * @param aKey
    *   Key to remove for
-   * @param {TValue} aValue
+   * @param aValue
    *   Value to remove from the group of aKey
    */
   remove(aKey: TKey, aValue: TValue): void {
     if (this.m_map.has(aKey)) {
-      const set = this.m_map.get(aKey) as Set<TValue>;
+      const set = this.m_map.get(aKey)!;
       set.delete(aValue);
-      if (set.size == 0) {
+      if (set.size === 0) {
         this.m_map.delete(aKey);
       }
     }
@@ -81,14 +81,14 @@ export class UFMapOfSet<TKey, TValue> {
   /**
    * Gets all values stored for a certain key.
    *
-   * @param {TKey} aKey
+   * @param aKey
    *   Key to get values for
    *
-   * @returns {TValue[]} All values
+   * @returns all values for the key or an empty array if the key does not exist.
    */
   get(aKey: TKey): TValue[] {
     if (this.m_map.has(aKey)) {
-      const set = this.m_map.get(aKey) as Set<TValue>;
+      const set = this.m_map.get(aKey)!;
       return Array.from(set);
     }
     return [];
@@ -97,10 +97,10 @@ export class UFMapOfSet<TKey, TValue> {
   /**
    * Checks if the map has a certain key.
    *
-   * @param {TKey} aKey
+   * @param aKey
    *   Key to check
    *
-   * @returns {boolean} True if the map contains the key.
+   * @returns true if the map contains the key.
    */
   has(aKey: TKey): boolean {
     return this.m_map.has(aKey);
@@ -109,24 +109,24 @@ export class UFMapOfSet<TKey, TValue> {
   /**
    * Checks if the instance has a certain value for a certain key.
    *
-   * @param {TKey} aKey
+   * @param aKey
    *   Key to check
-   * @param {TValue} aValue
+   * @param aValue
    *   Value to check
    *
-   * @returns {boolean} True if the map contains the key and value.
+   * @returns true if the map contains the key and value.
    */
   hasValue(aKey: TKey, aValue: TValue): boolean {
-    return this.m_map.has(aKey) && (this.m_map.get(aKey) as Set<TValue>).has(aValue);
+    return this.m_map.has(aKey) && (this.m_map.get(aKey)!).has(aValue);
   }
 
   /**
    * Checks if the map contains any sets.
    *
-   * @returns {boolean} True if there are no sets.
+   * @returns true if there are no sets.
    */
   isEmpty(): boolean {
-    return this.m_map.size == 0;
+    return this.m_map.size === 0;
   }
 
   // endregion
