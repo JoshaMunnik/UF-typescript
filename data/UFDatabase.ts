@@ -33,13 +33,6 @@ import {IUFDatabase} from "./IUFDatabase";
 // region types
 
 /**
- * Callback used by {@link UFDatabase.processSqlParameters}
- */
-interface IUFSqlParameterCallback {
-  (aName: string, aValue: any): string;
-}
-
-/**
  * {@link UFDatabase} can act as a base class for database implementations.
  *
  * It supports named parameters in sql queries, using ':name' where name can be a combination of letters, numbers
@@ -160,6 +153,9 @@ export abstract class UFDatabase<TRow> implements IUFDatabase {
 
   /**
    * @inheritDoc
+   *
+   * The default implementation calls {@link update} assuming it is handled in the same way by the database
+   * implementation.
    */
   async delete(aSql: string, aParameterValues?: IUFDynamicObject): Promise<number> {
     return await this.update(aSql, aParameterValues);
@@ -186,38 +182,38 @@ export abstract class UFDatabase<TRow> implements IUFDatabase {
   /**
    * Execute a sql to get a single value.
    *
-   * @param {string} aSql
+   * @param aSql
    *   Sql statement to perform
-   * @param {IUFDynamicObject} aParameterValues
+   * @param aParameterValues
    *   Values to use in case the statement contains parameters
-   * @param {*} aDefault
+   * @param aDefault
    *   Default value to return if the sql statement did not have any results
    *
-   * @return {*} result from sql statement or aDefault
+   * @return result from sql statement or aDefault
    */
   protected abstract field(aSql: string, aParameterValues?: IUFDynamicObject, aDefault?: any): Promise<any>;
 
   /**
    * Execute a sql to get a row.
    *
-   * @param {string} aSql
+   * @param aSql
    *   Sql statement to perform
-   * @param {IUFDynamicObject} [aParameterValues]
+   * @param aParameterValues
    *   Values to use in case the statement contains parameters
    *
-   * @return {TRow|undefined} result from sql statement; undefined when no row could be found
+   * @return result from sql statement; undefined when no row could be found
    */
   protected abstract row(aSql: string, aParameterValues?: IUFDynamicObject): Promise<TRow | undefined>;
 
   /**
    * Execute a sql to get multiple rows.
    *
-   * @param {string} aSql
+   * @param aSql
    *   Sql statement to perform
-   * @param {IUFDynamicObject} [aParameterValues]
+   * @param aParameterValues
    *   Values to use in case the statement contains parameters
    *
-   * @return {TRow[]} Result from sql statement
+   * @return Result from sql statement
    */
   protected abstract rows(aSql: string, aParameterValues?: IUFDynamicObject): Promise<TRow[]>;
 
@@ -227,10 +223,10 @@ export abstract class UFDatabase<TRow> implements IUFDatabase {
    * @template T
    * @template TRow
    *
-   * @param {TRow} aRow
+   * @param aRow
    *   Row to convert.
    *
-   * @return {T} The data from aRow as new type.
+   * @return The data from aRow as new type.
    */
   protected convertRow<T>(aRow: TRow): T {
     return aRow as unknown as T;
@@ -239,17 +235,17 @@ export abstract class UFDatabase<TRow> implements IUFDatabase {
   /**
    * Processes a sql with named parameters and replaces the named parameters with values returned by the callback.
    *
-   * @param {string} aSql
+   * @param aSql
    *   Sql statement to process.
-   * @param {IUFDynamicObject} aParameterValues
+   * @param aParameterValues
    *   An object that contains properties whose name match the named parameters
-   * @param {IUFSqlParameterCallback} aCallback
+   * @param aCallback
    *   This callback is invoked for every found named parameter. The result will be used to replace the named parameter.
    *
-   * @return {string} an updated SQL statement
+   * @return an updated SQL statement
    */
   protected processSqlParameters(
-    aSql: string, aParameterValues: IUFDynamicObject, aCallback: IUFSqlParameterCallback
+    aSql: string, aParameterValues: IUFDynamicObject, aCallback: (aName: string, aValue: any) => string
   ): string {
     const matches = aSql.matchAll(/(:[\w\d_]+)/g);
     let start = 0;
