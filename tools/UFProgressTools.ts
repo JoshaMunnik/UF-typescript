@@ -1,4 +1,3 @@
-import {IUFWeightedProgress} from "../actions/IUFWeightedProgress";
 import {UFObject} from "./UFObject";
 
 export class UFProgressTools {
