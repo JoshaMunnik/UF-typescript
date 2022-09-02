@@ -34,24 +34,6 @@ import {UFMath} from "./UFMath";
  * {@link UFText} implements methods for supporting strings and characters.
  */
 export class UFText {
-  // region private vars
-
-  /**
-   * Maps certain characters to their entity or special html tag or empty string if it has no use in html
-   */
-  static s_escapeHtmlMap: Map<string, string> = new Map([
-    ['&', '&amp;'],
-    ['<', '&lt;'],
-    ['>', '&gt;'],
-    ['"', '&quot;'],
-    ["'", '&#039;'],
-    ['\n', '<br/>'],
-    ['\t', ''],
-    ['\r', '']
-  ]);
-
-  // endregion
-
   // region public methods
 
   /**
@@ -75,21 +57,6 @@ export class UFText {
       return aSource;
     }
     return aSource + aSeparator + aValue;
-  }
-
-  /**
-   * Converts plain text to html by replacing certain characters with their entity equivalent and
-   * replacing \n with <br/> tags.
-   *
-   * Based on code from answer: https://stackoverflow.com/a/4835406/968451
-   *
-   * @param {string} aText
-   *   Text to convert
-   *
-   * @return {string} Html formatted plain text
-   */
-  static escapeHtml(aText: string): string {
-    return aText.replace(/[&<>"'\n\t\r]/g, character => UFText.s_escapeHtmlMap.get(character) as string);
   }
 
   /**
@@ -198,26 +165,6 @@ export class UFText {
    */
   static hexFourDigits(aNumber: number): string {
     return ('000' + Math.min(65535, Math.max(0, aNumber)).toString(16)).substring(-4);
-  }
-
-  /**
-   * Converts a html formatted text to a plain text.
-   *
-   * Based on code from:
-   * https://javascript.plainenglish.io/3-ways-to-convert-html-text-to-plain-text-strip-off-the-tags-from-the-string-4c947feb8a8c
-   *
-   * @param {string} aHtmlText
-   *   Html text to format
-   *
-   * @returns {string} plain version of the text
-   */
-  static convertToPlain(aHtmlText: string): string {
-    // Create a new div element
-    const tempDivElement = document.createElement("div");
-    // Set the HTML content with the given value
-    tempDivElement.innerHTML = aHtmlText;
-    // Retrieve the text property of the element
-    return tempDivElement.textContent || tempDivElement.innerText || "";
   }
 
   /**
