@@ -93,6 +93,21 @@ export class UFDate {
   static get HOUR_IN_MILLISECONDS() {
     return 60 * 60 * 1000;
   }
+
+  /**
+   * Checks if two dates are equal by comparing their utc year, month and date.
+   *
+   * @param aFirst
+   *   First date to check
+   * @param aSecond
+   *   Second date to check
+   *
+   * @return True if the date parts are equal.
+   */
+  static isEqualDate(aFirst: Date, aSecond: Date): boolean {
+    return (aFirst.getUTCFullYear() === aSecond.getUTCFullYear()) && (aFirst.getUTCMonth() === aSecond.getUTCMonth())
+      && (aFirst.getUTCDate() === aSecond.getUTCDate());
+  }
 }
 
 // endregion
