@@ -181,7 +181,8 @@ export class UFObject {
           result[propertyName] = UFObject.backupProperties(
             aSource[propertyName], aMap[propertyName]
           );
-        } else {
+        }
+        else {
           result[propertyName] = aSource[propertyName];
         }
       }
@@ -224,16 +225,35 @@ export class UFObject {
         const value = aValues[propertyName];
         if (typeof value === 'function') {
           value(anObject, propertyName);
-        } else if (typeof value === 'object') {
+        }
+        else if (typeof value === 'object') {
           UFObject.applyProperties(
             anObject[propertyName], aValues[propertyName]
           );
-        } else {
+        }
+        else {
           anObject[propertyName] = aValues[propertyName];
         }
       }
     }
     return anObject;
+  }
+
+  /**
+   * Copies the properties of an object. Recursively call this method of properties that are object values.
+   *
+   * @param anObject
+   *   Object to copy
+   *
+   * @return copy of an object
+   */
+  static deepCopy<T extends object>(anObject: T): T {
+    const result: any = {};
+    Object.keys(anObject).forEach(key => {
+      const value = (anObject as any)[key];
+        result[key] = typeof value === 'object' ? this.deepCopy(value) : value;
+    });
+    return result;
   }
 
 }
