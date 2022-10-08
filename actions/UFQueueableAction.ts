@@ -24,9 +24,9 @@
 
 // region imports
 
-import {IUFQueueableAction} from "./IUFQueueableAction";
-import {IUFWeightedProgress} from "./IUFWeightedProgress";
-import {IUFCancellationToken} from "./IUFCancellationToken";
+import {IUFQueueableAction} from "./IUFQueueableAction.js";
+import {IUFWeightedProgress} from "./IUFWeightedProgress.js";
+import {IUFCancellationToken} from "./IUFCancellationToken.js";
 
 // endregion
 

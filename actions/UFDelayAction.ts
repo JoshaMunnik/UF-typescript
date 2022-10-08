@@ -24,8 +24,8 @@
 
 // region imports
 
-import {UFQueueableAction} from "./UFQueueableAction";
-import {IUFCancellationToken} from "./IUFCancellationToken";
+import {UFQueueableAction} from "./UFQueueableAction.js";
+import {IUFCancellationToken} from "./IUFCancellationToken.js";
 
 // endregion
 

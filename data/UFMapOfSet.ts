@@ -79,6 +79,19 @@ export class UFMapOfSet<TKey, TValue> {
   }
 
   /**
+   * Searches for a key that contains the value and remove it.
+   *
+   * @param aValue
+   *   Value to remove
+   */
+  removeValue(aValue: TValue): void {
+    const key = this.findKey(aValue);
+    if (key) {
+      this.remove(key, aValue);
+    }
+  }
+
+  /**
    * Gets all values stored for a certain key.
    *
    * @param aKey
@@ -127,6 +140,23 @@ export class UFMapOfSet<TKey, TValue> {
    */
   isEmpty(): boolean {
     return this.m_map.size === 0;
+  }
+
+  /**
+   * Tries to the first key the value has been stored for.
+   *
+   * @param aValue
+   *   Value to find key
+   *
+   * @returns the key or null if no key could be found.
+   */
+  findKey(aValue: TValue): TKey | null {
+    for(const key of this.m_map.keys()) {
+      if (this.hasValue(key, aValue)) {
+        return key;
+      }
+    }
+    return null;
   }
 
   // endregion

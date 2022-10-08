@@ -24,9 +24,9 @@
 
 // region imports
 
-import {UFArray} from '../tools/UFArray';
-import {IUFPropertyValidator, IUFValidateValue, IUFValueValidator, UFValidators} from "../tools/UFValidators";
-import {IUFModel} from "./IUFModel";
+import {UFArray} from '../tools/UFArray.js';
+import {IUFPropertyValidator, IUFValidateValue, IUFValueValidator, UFValidators} from "../tools/UFValidators.js";
+import {IUFModel} from "./IUFModel.js";
 
 // endregion
 

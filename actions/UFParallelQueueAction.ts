@@ -24,12 +24,12 @@
 
 // region imports
 
-import {IUFQueueableAction} from "./IUFQueueableAction";
-import {UFQueueableAction} from "./UFQueueableAction";
-import {IUFCancellationToken} from "./IUFCancellationToken";
-import {UFProgressTools} from "../tools/UFProgressTools";
-import {UFCancellationTokenSource} from "./UFCancellationTokenSource";
-import {UFText} from "../tools/UFText";
+import {IUFQueueableAction} from "./IUFQueueableAction.js";
+import {UFQueueableAction} from "./UFQueueableAction.js";
+import {IUFCancellationToken} from "./IUFCancellationToken.js";
+import {UFProgressTools} from "../tools/UFProgressTools.js";
+import {UFCancellationTokenSource} from "./UFCancellationTokenSource.js";
+import {UFText} from "../tools/UFText.js";
 
 // endregion
 
