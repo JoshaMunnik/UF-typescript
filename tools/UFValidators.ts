@@ -24,7 +24,7 @@
 
 // region imports
 
-import {IUFModel} from "../models/IUFModel.js";
+import {IUFModel} from "../models/IUFModel";
 
 // endregion
 

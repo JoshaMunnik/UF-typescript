@@ -24,7 +24,7 @@
 
 // region imports
 
-import {UFText} from "./UFText.js";
+import {UFText} from "./UFText";
 
 // endregion
 

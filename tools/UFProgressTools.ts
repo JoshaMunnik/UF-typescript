@@ -1,4 +1,4 @@
-import {UFObject} from "./UFObject.js";
+import {UFObject} from "./UFObject";
 
 export class UFProgressTools {
   /**

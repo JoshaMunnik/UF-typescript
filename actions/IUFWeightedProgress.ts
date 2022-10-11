@@ -24,7 +24,7 @@
 
 // region imports
 
-import {IUFProgress} from "./IUFProgress.js";
+import {IUFProgress} from "./IUFProgress";
 
 // endregion
 

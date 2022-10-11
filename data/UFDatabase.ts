@@ -24,9 +24,9 @@
 
 // region imports
 
-import {IUFDynamicObject} from "../types/IUFDynamicObject.js";
-import {UFText} from "../tools/UFText.js";
-import {IUFDatabase} from "./IUFDatabase.js";
+import {IUFDynamicObject} from "../types/IUFDynamicObject";
+import {UFText} from "../tools/UFText";
+import {IUFDatabase} from "./IUFDatabase";
 
 // endregion
 

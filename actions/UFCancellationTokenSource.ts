@@ -24,7 +24,7 @@
 
 // region imports
 
-import {IUFCancellationToken} from "./IUFCancellationToken.js";
+import {IUFCancellationToken} from "./IUFCancellationToken";
 
 // endregion
 

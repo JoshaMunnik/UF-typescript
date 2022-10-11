@@ -24,7 +24,7 @@
 
 // region imports
 
-import {IUFDynamicObject} from "../types/IUFDynamicObject.js";
+import {IUFDynamicObject} from "../types/IUFDynamicObject";
 
 // endregion
 

@@ -24,8 +24,8 @@
 
 // region imports
 
-import {UFParallelQueueAction} from "./UFParallelQueueAction.js";
-import {IUFQueueableAction} from "./IUFQueueableAction.js";
+import {UFParallelQueueAction} from "./UFParallelQueueAction";
+import {IUFQueueableAction} from "./IUFQueueableAction";
 
 // endregion
 

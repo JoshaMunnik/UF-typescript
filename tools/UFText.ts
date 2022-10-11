@@ -24,7 +24,7 @@
 
 // region imports
 
-import {UFMath} from "./UFMath.js";
+import {UFMath} from "./UFMath";
 
 // endregion
 
