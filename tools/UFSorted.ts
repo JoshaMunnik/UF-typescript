@@ -24,7 +24,7 @@
 
 // region imports
 
-import {IUFSorted} from "../models/IUFSorted";
+import {IUFSorted} from "../models/IUFSorted.js";
 
 // endregion
 

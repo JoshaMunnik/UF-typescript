@@ -160,6 +160,26 @@ export class UFMapOfSet<TKey, TValue> {
   }
 
   // endregion
+
+  // region public properties
+
+  /**
+   * Gets the number of key entries.
+   */
+  get keyCount(): number {
+    return this.m_map.size;
+  }
+
+  /**
+   * Gets the total number of value entries.
+   */
+  get valueTotalCount(): number {
+    let result = 0;
+    this.m_map.forEach(values => result += values.size);
+    return result;
+  }
+
+  // endregion
 }
 
 // endregion
